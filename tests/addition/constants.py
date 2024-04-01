@@ -1,0 +1,2 @@
+VOCAB_SIZE = 10  # digits 0..9
+MAX_TEST_SET_SIZE = 500
