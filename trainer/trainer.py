@@ -3,14 +3,15 @@ from torch.nn.utils import clip_grad_norm_
 from torch.utils.data.dataloader import DataLoader
 
 from trainer.constants import NUM_WORKERS, SAMPLES, BATCH_SIZE, GRAD_NORM_CLIP
-from trainer.optimizer import OptimizerFactory
+from trainer.optimizer import get_optimizer
+
 
 # TODO: No need for a class here. Just have a static `train()` method
 class Trainer:
     def __init__(self, model, train_dataset):
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.model = model.to(self.device)
-        self.optimizer = OptimizerFactory.get(self.model.named_modules(), self.model.named_parameters())
+        self.optimizer = get_optimizer(self.model.named_modules(), self.model.named_parameters())
 
         sampler = torch.utils.data.RandomSampler(train_dataset, replacement=True, num_samples=SAMPLES)
         self.dataloader = DataLoader(train_dataset, sampler=sampler, shuffle=False, pin_memory=True,
