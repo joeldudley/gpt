@@ -1,8 +1,6 @@
 import torch
 from torch.utils.data.dataloader import DataLoader
 
-from tests.addition.dataset import Split
-
 
 class Evaluator:
     def __init__(self, num_digits, train_dataset, test_dataset, model):
@@ -14,14 +12,13 @@ class Evaluator:
     def evaluate(self, trainer):
         self.model.eval()
         with torch.no_grad():
-            qty_correct_train = self._evaluate_split(trainer, Split.TRAIN)
-            qty_correct_test = self._evaluate_split(trainer, Split.TEST)
+            qty_correct_train = self._evaluate_dataset(trainer, self.train_dataset)
+            qty_correct_test = self._evaluate_dataset(trainer, self.test_dataset)
         self.model.train()
 
         return qty_correct_train, qty_correct_test
 
-    def _evaluate_split(self, trainer, split):
-        dataset = self.train_dataset if split is Split.TRAIN else self.test_dataset
+    def _evaluate_dataset(self, trainer, dataset):
         factors = torch.tensor([[10 ** i for i in range(self.num_digits + 1)][::-1]]).to(trainer.device)
         loader = DataLoader(dataset, batch_size=100, num_workers=0, drop_last=False)
 

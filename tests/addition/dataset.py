@@ -1,13 +1,4 @@
-from enum import Enum
-
 from torch.utils.data import Dataset
-
-from tests.addition.constants import MAX_TEST_SET_SIZE
-
-
-class Split(Enum):
-    TEST = "Test"
-    TRAIN = "Train"
 
 
 class AdditionDataset(Dataset):
