@@ -21,8 +21,8 @@ def train(model, train_dataset, iterations, batch_end_callback):
         except StopIteration:
             data_iter = iter(dataloader)
             batch = next(data_iter)
-        inputs, targets = [tensor.to('cpu') for tensor in batch]
 
+        inputs, targets = [tensor.to('cpu') for tensor in batch]
         _, loss = model(inputs, targets)
 
         model.zero_grad(set_to_none=True)
