@@ -1,7 +1,7 @@
 from torch.utils.data import Dataset
 
 
-class AdditionDataset(Dataset):
+class SimpleDataset(Dataset):
     def __init__(self, samples):
         self.samples = samples
         self.len = len(self.samples)

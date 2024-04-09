@@ -1,7 +1,7 @@
 import torch
 
 from tests.constants import MAX_TEST_SET_SIZE, SEED, NUM_DIGITS
-from tests.addition.dataset import AdditionDataset
+from tests.addition.dataset import SimpleDataset
 
 
 class Samples:
@@ -11,10 +11,7 @@ class Samples:
         test_set_size = min(int(dataset_size * 0.2), MAX_TEST_SET_SIZE)  # 20% of the whole dataset, max. 500
 
         samples = Samples._get_all_samples(NUM_DIGITS, dataset_size)
-        train_samples = samples[test_set_size:]
-        test_samples = samples[:test_set_size]
-
-        return AdditionDataset(train_samples), AdditionDataset(test_samples)
+        return SimpleDataset(samples[test_set_size:]), SimpleDataset(samples[:test_set_size])
 
     @classmethod
     def _get_all_samples(cls, num_digits, dataset_size):
