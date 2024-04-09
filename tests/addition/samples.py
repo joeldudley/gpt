@@ -1,10 +1,24 @@
 import torch
 
+from tests.constants import MAX_TEST_SET_SIZE, SEED, NUM_DIGITS
+from tests.addition.dataset import AdditionDataset
+
 
 class Samples:
+    @staticmethod
+    def get_datasets():
+        dataset_size = (10 ** NUM_DIGITS) ** 2
+        test_set_size = min(int(dataset_size * 0.2), MAX_TEST_SET_SIZE)  # 20% of the whole dataset, max. 500
+
+        samples = Samples._get_all_samples(NUM_DIGITS, dataset_size)
+        train_samples = samples[test_set_size:]
+        test_samples = samples[:test_set_size]
+
+        return AdditionDataset(train_samples), AdditionDataset(test_samples)
+
     @classmethod
-    def get_all_samples(cls, seed, num_digits, dataset_size):
-        all_number_pairs = torch.randperm(dataset_size, generator=torch.Generator().manual_seed(seed))
+    def _get_all_samples(cls, num_digits, dataset_size):
+        all_number_pairs = torch.randperm(dataset_size, generator=torch.Generator().manual_seed(SEED))
         return [cls._get_sample(tensor.item(), num_digits) for tensor in all_number_pairs]
 
     @staticmethod
