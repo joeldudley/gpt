@@ -3,7 +3,7 @@ import torch
 from train.constants import WEIGHT_DECAY, BETAS, LEARNING_RATE
 
 
-def get_optimizer(named_modules, named_params):
+def get_adamw_optimizer(named_modules, named_params):
     decay_params, no_decay_params = _get_params_by_type(named_modules, named_params)
     optimiser_groups = [{"params": decay_params, "weight_decay": WEIGHT_DECAY},
                         {"params": no_decay_params, "weight_decay": 0.0}]

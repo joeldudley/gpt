@@ -3,12 +3,12 @@ from torch.nn.utils import clip_grad_norm_
 from torch.utils.data.dataloader import DataLoader
 
 from train.constants import NUM_WORKERS, SAMPLES, BATCH_SIZE, GRAD_NORM_CLIP
-from train.optimisation import get_optimizer
+from train.optimisation import get_adamw_optimizer
 
 
 def train(model, train_dataset, iterations, batch_end_callback):
     model = model.to('cpu')
-    optimizer = get_optimizer(model.named_modules(), model.named_parameters())
+    optimizer = get_adamw_optimizer(model.named_modules(), model.named_parameters())
     sampler = torch.utils.data.RandomSampler(train_dataset, replacement=True, num_samples=SAMPLES)
     dataloader = DataLoader(train_dataset, sampler=sampler, shuffle=False, pin_memory=True, batch_size=BATCH_SIZE,
                             num_workers=NUM_WORKERS)
