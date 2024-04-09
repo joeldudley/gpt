@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import Dataset
 
-from tests.constants import MAX_TEST_SET_SIZE, SEED, NUM_DIGITS
+from tests.constants import MAX_TEST_SET_SIZE, RANDOM_SEED, NUM_DIGITS
 
 
 class SimpleDataset(Dataset):
@@ -25,7 +25,7 @@ def get_train_test_datasets():
 
 
 def _get_all_samples(num_digits, dataset_size):
-    all_number_pairs = torch.randperm(dataset_size, generator=torch.Generator().manual_seed(SEED))
+    all_number_pairs = torch.randperm(dataset_size, generator=torch.Generator().manual_seed(RANDOM_SEED))
     return [_get_sample(tensor.item(), num_digits) for tensor in all_number_pairs]
 
 

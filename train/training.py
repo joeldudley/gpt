@@ -3,7 +3,7 @@ from torch.nn.utils import clip_grad_norm_
 from torch.utils.data.dataloader import DataLoader
 
 from train.constants import NUM_WORKERS, SAMPLES, BATCH_SIZE, GRAD_NORM_CLIP
-from train.optimizer import get_optimizer
+from train.optimisation import get_optimizer
 
 
 def train(model, train_dataset, iterations, batch_end_callback):
