@@ -7,10 +7,7 @@ from train.optimizer import get_optimizer
 
 
 def train(model, train_dataset, iterations, batch_end_callback):
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    print("Device:", device)
-
-    model = model.to(device)
+    model = model.to('cpu')
     optimizer = get_optimizer(model.named_modules(), model.named_parameters())
     sampler = torch.utils.data.RandomSampler(train_dataset, replacement=True, num_samples=SAMPLES)
     dataloader = DataLoader(train_dataset, sampler=sampler, shuffle=False, pin_memory=True, batch_size=BATCH_SIZE,
@@ -24,7 +21,7 @@ def train(model, train_dataset, iterations, batch_end_callback):
         except StopIteration:
             data_iter = iter(dataloader)
             batch = next(data_iter)
-        inputs, targets = [tensor.to(device) for tensor in batch]
+        inputs, targets = [tensor.to('cpu') for tensor in batch]
 
         _, loss = model(inputs, targets)
 

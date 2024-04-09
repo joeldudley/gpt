@@ -6,7 +6,6 @@ from tests.constants import NUM_DIGITS
 
 class Evaluator:
     def __init__(self, train_dataset, test_dataset, model):
-        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.train_dataset = train_dataset
         self.test_dataset = test_dataset
         self.model = model
@@ -21,12 +20,12 @@ class Evaluator:
         return qty_correct_train, qty_correct_test
 
     def _evaluate_dataset(self, dataset):
-        factors = torch.tensor([[10 ** i for i in range(NUM_DIGITS + 1)][::-1]]).to(self.device)
+        factors = torch.tensor([[10 ** i for i in range(NUM_DIGITS + 1)][::-1]]).to('cpu')
         loader = DataLoader(dataset, batch_size=100, num_workers=0, drop_last=False)
 
         total_correct = 0
         for _, (inputs, _) in enumerate(loader):
-            total_correct += self._qty_correct(inputs.to(self.device), factors)
+            total_correct += self._qty_correct(inputs.to('cpu'), factors)
 
         return total_correct
 
