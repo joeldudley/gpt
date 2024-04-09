@@ -5,7 +5,7 @@ from torch.utils.data.dataloader import DataLoader
 from trainer.constants import NUM_WORKERS, SAMPLES, BATCH_SIZE, GRAD_NORM_CLIP
 from trainer.optimizer import OptimizerFactory
 
-
+# TODO: No need for a class here. Just have a static `train()` method
 class Trainer:
     def __init__(self, model, train_dataset):
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'

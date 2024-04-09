@@ -6,7 +6,7 @@ import torch
 
 from gpt.gpt import GPT
 from tests.addition.evaluator import Evaluator
-from tests.addition.samples import get_train_test_datasets
+from tests.addition.datasets import get_train_test_datasets
 from tests.constants import VOCAB_SIZE, NUM_DIGITS, SEED
 from trainer.trainer import Trainer
 
