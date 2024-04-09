@@ -1,0 +1,37 @@
+import torch
+from torch.nn.utils import clip_grad_norm_
+from torch.utils.data.dataloader import DataLoader
+
+from train.constants import NUM_WORKERS, SAMPLES, BATCH_SIZE, GRAD_NORM_CLIP
+from train.optimizer import get_optimizer
+
+
+def train(model, train_dataset, iterations, batch_end_callback):
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    print("Device:", device)
+
+    model = model.to(device)
+    optimizer = get_optimizer(model.named_modules(), model.named_parameters())
+    sampler = torch.utils.data.RandomSampler(train_dataset, replacement=True, num_samples=SAMPLES)
+    dataloader = DataLoader(train_dataset, sampler=sampler, shuffle=False, pin_memory=True, batch_size=BATCH_SIZE,
+                            num_workers=NUM_WORKERS)
+
+    data_iter = iter(dataloader)
+    iteration = 0
+    while iteration <= iterations:
+        try:
+            batch = next(data_iter)
+        except StopIteration:
+            data_iter = iter(dataloader)
+            batch = next(data_iter)
+        inputs, targets = [tensor.to(device) for tensor in batch]
+
+        _, loss = model(inputs, targets)
+
+        model.zero_grad(set_to_none=True)
+        loss.backward()
+        clip_grad_norm_(model.parameters(), GRAD_NORM_CLIP)
+        optimizer.step()
+
+        batch_end_callback(iteration)
+        iteration += 1

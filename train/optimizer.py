@@ -1,6 +1,6 @@
 import torch
 
-from trainer.constants import WEIGHT_DECAY, BETAS, LEARNING_RATE
+from train.constants import WEIGHT_DECAY, BETAS, LEARNING_RATE
 
 
 def get_optimizer(named_modules, named_params):
