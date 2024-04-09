@@ -23,12 +23,10 @@ class Trainer:
 
     def run(self):
         print("Device:", self.device)
-
         self.model.train()
 
         data_iter = iter(self.dataloader)
-        while True:
-            # fetch the next batch and re-init iterator if needed
+        while self.iteration <= self.max_iterations:
             try:
                 batch = next(data_iter)
             except StopIteration:
@@ -36,18 +34,12 @@ class Trainer:
                 batch = next(data_iter)
             inputs, targets = [tensor.to(self.device) for tensor in batch]
 
-            # forward the model
             _, self.loss = self.model(inputs, targets)
 
-            # backprop and update the parameters
             self.model.zero_grad(set_to_none=True)
             self.loss.backward()
             clip_grad_norm_(self.model.parameters(), GRAD_NORM_CLIP)
             self.optimizer.step()
 
-            # report back
             self.batch_end_callback(self)
-
-            if self.iteration == self.max_iterations:
-                break
             self.iteration += 1
