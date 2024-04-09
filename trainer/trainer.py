@@ -7,12 +7,7 @@ from trainer.optimizer import OptimizerFactory
 
 
 class Trainer:
-    def __init__(self, model, train_dataset, batch_end_callback, max_iterations):
-        self.batch_end_callback = batch_end_callback
-        self.loss = None
-        self.iteration = 0
-        self.max_iterations = max_iterations
-
+    def __init__(self, model, train_dataset):
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.model = model.to(self.device)
         self.optimizer = OptimizerFactory.get(self.model.named_modules(), self.model.named_parameters())
@@ -21,12 +16,13 @@ class Trainer:
         self.dataloader = DataLoader(train_dataset, sampler=sampler, shuffle=False, pin_memory=True,
                                      batch_size=BATCH_SIZE, num_workers=NUM_WORKERS)
 
-    def run(self):
+    def train(self, iterations, batch_end_callback):
         print("Device:", self.device)
         self.model.train()
 
         data_iter = iter(self.dataloader)
-        while self.iteration <= self.max_iterations:
+        iteration = 0
+        while iteration <= iterations:
             try:
                 batch = next(data_iter)
             except StopIteration:
@@ -34,12 +30,12 @@ class Trainer:
                 batch = next(data_iter)
             inputs, targets = [tensor.to(self.device) for tensor in batch]
 
-            _, self.loss = self.model(inputs, targets)
+            _, loss = self.model(inputs, targets)
 
             self.model.zero_grad(set_to_none=True)
-            self.loss.backward()
+            loss.backward()
             clip_grad_norm_(self.model.parameters(), GRAD_NORM_CLIP)
             self.optimizer.step()
 
-            self.batch_end_callback(self)
-            self.iteration += 1
+            batch_end_callback(self, iteration)
+            iteration += 1
