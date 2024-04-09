@@ -17,8 +17,8 @@ class Test(unittest.TestCase):
 
         max_seq_len = 3 * NUM_DIGITS + 1 - 1
         self.model = GPT(VOCAB_SIZE, max_seq_len)
-        self.train_dataset, self.test_dataset = Samples.get_datasets()
-        self.evaluator = Evaluator(self.train_dataset, self.test_dataset, self.model)
+        self.train_dataset, test_dataset = Samples.get_datasets()
+        self.evaluator = Evaluator(self.train_dataset, test_dataset, self.model)
 
     def test_learns_to_sum_two_digit_numbers(self):
         expected_correct = {0: (79, 9), 500: (462, 22), 1000: (5643, 307), 1500: (9379, 493), 2000: (9500, 500)}
