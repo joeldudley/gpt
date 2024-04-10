@@ -26,7 +26,7 @@ class GPT(nn.Module):
     def generate(self, inputs, max_new_tokens):
         tokens = inputs
         for _ in range(max_new_tokens):
-            tokens = self.generate_token(tokens)
+            tokens = torch.cat((tokens, self.generate_token(tokens)), dim=1)
         return tokens
 
     def generate_token(self, prev_tokens):
@@ -34,7 +34,7 @@ class GPT(nn.Module):
         logits, _ = self(cropped_tokens)  # We skip the scaling of logits by temperature in the original GPT-2 paper.
         probabilities = softmax(logits[:, -1, :], dim=-1)
         _, next_token = torch.topk(probabilities, k=1)
-        return torch.cat((prev_tokens, next_token), dim=1)
+        return next_token
 
     @staticmethod
     def _init_weights(module):
