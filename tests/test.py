@@ -33,8 +33,6 @@ class Test(unittest.TestCase):
 
         train(self.model, self.train_dataset, 2000, callback)
 
-        # TODO: Add a check on successful generation here
-
     @staticmethod
     def _set_rand_seeds():
         random.seed(RANDOM_SEED)
