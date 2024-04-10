@@ -1,8 +1,9 @@
 import torch
 import torch.nn as nn
-from torch.nn import functional
+from torch.nn import init
+from torch.nn.functional import cross_entropy, softmax
 
-from gpt.constants import EMBED_DIM, TEMPERATURE
+from gpt.constants import EMBED_DIM
 from gpt.transformer.transformer import Transformer
 
 
@@ -30,26 +31,25 @@ class GPT(nn.Module):
 
     def generate_token(self, prev_tokens):
         cropped_tokens = prev_tokens if prev_tokens.size(1) <= self.max_seq_len else prev_tokens[:, -self.max_seq_len:]
-        logits, _ = self(cropped_tokens)
-        scaled_logits = logits[:, -1, :] / TEMPERATURE
-        probabilities = functional.softmax(scaled_logits, dim=-1)
-        _, next_token = torch.topk(probabilities, k=1, dim=-1)
+        logits, _ = self(cropped_tokens)  # We skip the scaling of logits by temperature in the original GPT-2 paper.
+        probabilities = softmax(logits[:, -1, :], dim=-1)
+        _, next_token = torch.topk(probabilities, k=1)
         return torch.cat((prev_tokens, next_token), dim=1)
 
     @staticmethod
     def _init_weights(module):
-        # NB: We skip the special scaling of residual layer weights in the original GPT-2 paper.
+        # We skip the special scaling of residual layer weights in the original GPT-2 paper.
         if isinstance(module, nn.Linear):
-            torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
+            init.normal_(module.weight, std=0.02)
             if module.bias is not None:
-                torch.nn.init.zeros_(module.bias)
+                init.zeros_(module.bias)
         elif isinstance(module, nn.Embedding):
-            torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
+            init.normal_(module.weight, std=0.02)
         elif isinstance(module, nn.LayerNorm):
-            torch.nn.init.zeros_(module.bias)
-            torch.nn.init.ones_(module.weight)
+            init.zeros_(module.bias)
+            init.ones_(module.weight)
 
     @staticmethod
     def _get_loss(logits, targets):
         return None if targets is None \
-            else functional.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-1)
+            else cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-1)
