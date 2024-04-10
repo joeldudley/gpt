@@ -30,6 +30,6 @@ class Transformer(nn.Module):
     def init_weights(self):
         weight_std = 0.02 / math.sqrt(2 * len(self.transformer_blocks))
         for block in self.transformer_blocks:
-            for param_name, param in block.feedforward.c_proj.named_parameters():
+            for param_name, param in block.feedforward.output_projection.named_parameters():
                 if param_name == 'weight':
                     torch.nn.init.normal_(param, mean=0.0, std=weight_std)
