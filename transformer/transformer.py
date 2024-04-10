@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
 
-from gpt.constants import EMBED_DIM, NUM_BLOCKS, DROPOUT_PROB
-from gpt.transformerblock import TransformerBlock
+from transformer.constants import EMBED_DIM, NUM_BLOCKS, DROPOUT_PROB
+from transformer.transformerblock import TransformerBlock
 
 
 class Transformer(nn.Module):

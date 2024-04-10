@@ -5,7 +5,7 @@ import torch.nn as nn
 from torch.nn import functional
 
 from gpt.constants import EMBED_DIM, NUM_BLOCKS
-from gpt.transformer import Transformer
+from transformer.transformer import Transformer
 
 
 class GPT(nn.Module):

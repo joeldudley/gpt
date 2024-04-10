@@ -1,7 +1,7 @@
 import torch.nn as nn
 
-from gpt.constants import EMBED_DIM, DROPOUT_PROB
-from gpt.gelu import GaussianErrorLinearUnit
+from transformer.constants import EMBED_DIM, DROPOUT_PROB
+from transformer.gelu import GaussianErrorLinearUnit
 
 
 class TransformerBlockFeedForward(nn.Module):
