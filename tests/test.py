@@ -46,6 +46,7 @@ class Test(unittest.TestCase):
             share_correct_train = 100 * qty_correct_train / len(self.train_dataset)
             share_correct_test = 100 * qty_correct_test / len(self.test_dataset)
 
+            print()
             print("Iteration", iteration)
             print("Train score: %.2f%% correct (%d/%d)" % (
                 share_correct_train, qty_correct_train, len(self.train_dataset)))

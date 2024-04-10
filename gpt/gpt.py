@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from torch.nn import functional
 
-from gpt.constants import EMBED_DIM
+from gpt.constants import EMBED_DIM, TEMPERATURE
 from gpt.transformer.transformer import Transformer
 
 
@@ -22,16 +22,16 @@ class GPT(nn.Module):
         return logits, self._get_loss(logits, targets)
 
     @torch.no_grad()
-    def generate(self, inputs, max_new_tokens, temperature=1.0):
+    def generate(self, inputs, max_new_tokens):
         tokens = inputs
         for _ in range(max_new_tokens):
-            tokens = self.generate_token(tokens, temperature)
+            tokens = self.generate_token(tokens)
         return tokens
 
-    def generate_token(self, prev_tokens, temperature):
+    def generate_token(self, prev_tokens):
         cropped_tokens = prev_tokens if prev_tokens.size(1) <= self.max_seq_len else prev_tokens[:, -self.max_seq_len:]
         logits, _ = self(cropped_tokens)
-        scaled_logits = logits[:, -1, :] / temperature
+        scaled_logits = logits[:, -1, :] / TEMPERATURE
         probabilities = functional.softmax(scaled_logits, dim=-1)
         _, next_token = torch.topk(probabilities, k=1, dim=-1)
         return torch.cat((prev_tokens, next_token), dim=1)
