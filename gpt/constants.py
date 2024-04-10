@@ -8,5 +8,5 @@ GRAD_NORM_CLIP = 1.0
 NUM_ATTN_HEADS = 3
 # The number of transformer blocks
 NUM_BLOCKS = 3
-SAMPLES = int(1e10)
+NUM_SAMPLES = int(1e10)
 WEIGHT_DECAY = 0.1
