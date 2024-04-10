@@ -10,7 +10,6 @@ from gpt.transformer.transformer import Transformer
 class GPT(nn.Module):
     def __init__(self, vocab_size, max_seq_len):
         super().__init__()
-
         self.max_seq_len = max_seq_len
         self.transformer = Transformer(vocab_size, max_seq_len)
         self.language_modeling_head = nn.Linear(EMBED_DIM, vocab_size, bias=False)
@@ -40,15 +39,16 @@ class GPT(nn.Module):
     @staticmethod
     def _init_weights(module):
         # We skip the special scaling of residual layer weights in the original GPT-2 paper.
-        if isinstance(module, nn.Linear):
-            init.normal_(module.weight, std=0.02)
-            if module.bias is not None:
+        match module:
+            case nn.Linear():
+                init.normal_(module.weight, std=0.02)
+                if module.bias is not None:
+                    init.zeros_(module.bias)
+            case nn.Embedding():
+                init.normal_(module.weight, std=0.02)
+            case nn.LayerNorm():
                 init.zeros_(module.bias)
-        elif isinstance(module, nn.Embedding):
-            init.normal_(module.weight, std=0.02)
-        elif isinstance(module, nn.LayerNorm):
-            init.zeros_(module.bias)
-            init.ones_(module.weight)
+                init.ones_(module.weight)
 
     @staticmethod
     def _get_loss(logits, targets):
