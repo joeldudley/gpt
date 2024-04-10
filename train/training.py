@@ -1,9 +1,8 @@
-import torch
 from torch.nn.utils import clip_grad_norm_
 from torch.utils.data import RandomSampler
 from torch.utils.data.dataloader import DataLoader
 
-from train.constants import NUM_WORKERS, SAMPLES, BATCH_SIZE, GRAD_NORM_CLIP
+from constants.constants import NUM_WORKERS, SAMPLES, BATCH_SIZE, GRAD_NORM_CLIP
 from train.optimisation import get_adamw_optimizer
 
 

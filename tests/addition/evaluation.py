@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data.dataloader import DataLoader
 
-from tests.constants import NUM_DIGITS
+from tests.test_constants.constants import NUM_DIGITS
 
 
 def evaluate(model, train_dataset, test_dataset):

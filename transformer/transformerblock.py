@@ -1,6 +1,6 @@
 import torch.nn as nn
 
-from transformer.constants import EMBED_DIM
+from constants.constants import EMBED_DIM
 from transformer.multiheadattention import MultiHeadAttention
 from transformer.transformerblockfeedforward import TransformerBlockFeedForward
 

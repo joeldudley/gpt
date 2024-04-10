@@ -7,7 +7,7 @@ import torch
 from gpt.gpt import GPT
 from tests.addition.datasets import get_train_test_datasets
 from tests.addition.evaluation import evaluate
-from tests.constants import VOCAB_SIZE, NUM_DIGITS, RANDOM_SEED
+from tests.test_constants.constants import VOCAB_SIZE, NUM_DIGITS, RANDOM_SEED
 from train.training import train
 
 

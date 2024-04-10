@@ -1,6 +1,6 @@
 import torch.nn as nn
 
-from transformer.constants import EMBED_DIM, DROPOUT_PROB
+from constants.constants import EMBED_DIM, DROPOUT_PROB
 from transformer.gelu import GaussianErrorLinearUnit
 
 

@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from torch.nn import functional
 
-from gpt.constants import EMBED_DIM
+from constants.constants import EMBED_DIM
 from transformer.transformer import Transformer
 
 
