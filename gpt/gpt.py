@@ -1,10 +1,8 @@
-import math
-
 import torch
 import torch.nn as nn
 from torch.nn import functional
 
-from gpt.constants import EMBED_DIM, NUM_BLOCKS
+from gpt.constants import EMBED_DIM
 from transformer.transformer import Transformer
 
 
@@ -18,9 +16,7 @@ class GPT(nn.Module):
 
         # init all weights, and apply a special scaled init to the residual projections, per GPT-2 paper
         self.apply(self._init_weights)
-        for param_name, param in self.transformer.hidden_state.named_parameters():
-            if param_name.endswith('c_proj.weight'):
-                torch.nn.init.normal_(param, mean=0.0, std=0.02 / math.sqrt(2 * NUM_BLOCKS))
+        self.transformer.init_weights()
 
     def forward(self, inputs, targets=None):
         transformer_outputs = self.transformer(inputs)

@@ -1,3 +1,5 @@
+import math
+
 import torch
 import torch.nn as nn
 
@@ -24,3 +26,8 @@ class Transformer(nn.Module):
         for transformer_block in self.hidden_state:
             x = transformer_block(x)
         return self.layer_norm_feedforward(x)
+
+    def init_weights(self):
+        for param_name, param in self.hidden_state.named_parameters():
+            if param_name.endswith('c_proj.weight'):
+                torch.nn.init.normal_(param, mean=0.0, std=0.02 / math.sqrt(2 * NUM_BLOCKS))
