@@ -23,27 +23,12 @@ class GPT(nn.Module):
                 torch.nn.init.normal_(param, mean=0.0, std=0.02 / math.sqrt(2 * NUM_BLOCKS))
 
     def forward(self, inputs, targets=None):
-        _, seq_len = inputs.size()
-        position = torch.arange(0, seq_len, dtype=torch.long, device=inputs.device).unsqueeze(0)
-
-        # forward the GPT model itself
-        token_embedding = self.transformer.token_embedding_weights(inputs)
-        position_embeddings = self.transformer.position_embedding_weights(position)
-        x = self.transformer.dropout(token_embedding + position_embeddings)
-        for transformer_block in self.transformer.hidden_state:
-            x = transformer_block(x)
-        x = self.transformer.layer_norm_feedforward(x)
-        logits = self.language_modeling_head(x)
-
+        transformer_outputs = self.transformer(inputs)
+        logits = self.language_modeling_head(transformer_outputs)
         return logits, self._get_loss(logits, targets)
 
     @torch.no_grad()
     def generate(self, idx, max_new_tokens, temperature=1.0, do_sample=False, top_k=None):
-        """
-        Take a conditioning sequence of indices idx (LongTensor of shape (b,t)) and complete
-        the sequence max_new_tokens times, feeding the predictions back into the model each time.
-        Most likely you'll want to make sure to be in model.eval() mode of operation for this.
-        """
         for _ in range(max_new_tokens):
             # if the sequence context is growing too long we must crop it at max_seq_len
             idx_cond = idx if idx.size(1) <= self.max_seq_len else idx[:, -self.max_seq_len:]
