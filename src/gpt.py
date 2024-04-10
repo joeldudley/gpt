@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 from torch.nn import functional
 
-from constants.constants import EMBED_DIM
-from transformer.transformer import Transformer
+from src.constants import EMBED_DIM
+from src.transformer.transformer import Transformer
 
 
 class GPT(nn.Module):

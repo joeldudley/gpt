@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 from torch.nn.functional import softmax
 
-from constants.constants import EMBED_DIM, NUM_ATTN_HEADS, DROPOUT_PROB
+from src.constants import EMBED_DIM, NUM_ATTN_HEADS, DROPOUT_PROB
 
 
 class MultiHeadAttention(nn.Module):

@@ -3,8 +3,8 @@ import math
 import torch
 import torch.nn as nn
 
-from constants.constants import EMBED_DIM, DROPOUT_PROB, NUM_BLOCKS
-from transformer.transformerblock import TransformerBlock
+from src.constants import EMBED_DIM, DROPOUT_PROB, NUM_BLOCKS
+from src.transformer.transformerblock import TransformerBlock
 
 
 class Transformer(nn.Module):
