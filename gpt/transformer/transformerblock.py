@@ -1,8 +1,8 @@
 import torch.nn as nn
 
-from src.constants import EMBED_DIM
-from src.transformer.multiheadattention import MultiHeadAttention
-from src.transformer.transformerblockfeedforward import TransformerBlockFeedForward
+from gpt.constants import EMBED_DIM
+from gpt.transformer.multiheadattention import MultiHeadAttention
+from gpt.transformer.transformerblockfeedforward import TransformerBlockFeedForward
 
 
 class TransformerBlock(nn.Module):

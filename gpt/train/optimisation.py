@@ -1,6 +1,6 @@
 import torch
 
-from src.constants import WEIGHT_DECAY, BETAS, LEARNING_RATE
+from gpt.constants import WEIGHT_DECAY, BETAS, LEARNING_RATE
 
 
 def get_adamw_optimizer(named_modules, named_params):

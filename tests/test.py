@@ -4,11 +4,11 @@ import unittest
 import numpy as np
 import torch
 
-from src.gpt import GPT
+from gpt.gpt import GPT
 from tests.addition.datasets import get_train_test_datasets
 from tests.addition.evaluation import evaluate
 from tests.test_constants.constants import VOCAB_SIZE, NUM_DIGITS, RANDOM_SEED
-from src.train.training import train
+from gpt.train.training import train
 
 
 class Test(unittest.TestCase):
