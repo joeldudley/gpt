@@ -13,7 +13,7 @@ class Transformer(nn.Module):
         self.token_embedding_weights = nn.Embedding(vocab_size, EMBED_DIM)
         self.position_embedding_weights = nn.Embedding(max_seq_len, EMBED_DIM)
         self.dropout = nn.Dropout(DROPOUT_PROB)
-        self.hidden_state = nn.ModuleList([TransformerBlock(max_seq_len) for _ in range(NUM_BLOCKS)])
+        self.transformer_blocks = nn.ModuleList([TransformerBlock(max_seq_len) for _ in range(NUM_BLOCKS)])
         self.layer_norm_feedforward = nn.LayerNorm(EMBED_DIM)
 
     def forward(self, inputs):
@@ -23,12 +23,12 @@ class Transformer(nn.Module):
         token_embedding = self.token_embedding_weights(inputs)
         position_embeddings = self.position_embedding_weights(position)
         x = self.dropout(token_embedding + position_embeddings)
-        for transformer_block in self.hidden_state:
+        for transformer_block in self.transformer_blocks:
             x = transformer_block(x)
         return self.layer_norm_feedforward(x)
 
     def init_weights(self):
-        for block in self.hidden_state:
+        for block in self.transformer_blocks:
             for param_name, param in block.feedforward.c_proj.named_parameters():
                 if param_name == 'weight':
                     torch.nn.init.normal_(param, mean=0.0, std=0.02 / math.sqrt(2 * NUM_BLOCKS))
