@@ -18,7 +18,7 @@ class GPT(nn.Module):
 
         # init all weights, and apply a special scaled init to the residual projections, per GPT-2 paper
         self.apply(self._init_weights)
-        for param_name, param in self.named_parameters():
+        for param_name, param in self.transformer.hidden_state.named_parameters():
             if param_name.endswith('c_proj.weight'):
                 torch.nn.init.normal_(param, mean=0.0, std=0.02 / math.sqrt(2 * NUM_BLOCKS))
 
