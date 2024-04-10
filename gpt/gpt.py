@@ -4,8 +4,8 @@ import torch
 import torch.nn as nn
 from torch.nn import functional
 
-from gpt.constants import EMBED_DIM, NUM_BLOCKS, DROPOUT_PROB
-from gpt.transformerblock import TransformerBlock
+from gpt.constants import EMBED_DIM, NUM_BLOCKS
+from gpt.transformer import Transformer
 
 
 class GPT(nn.Module):
@@ -13,13 +13,7 @@ class GPT(nn.Module):
         super().__init__()
 
         self.max_seq_len = max_seq_len
-        self.transformer = nn.ModuleDict(dict(
-            token_embedding_weights=nn.Embedding(vocab_size, EMBED_DIM),
-            position_embedding_weights=nn.Embedding(max_seq_len, EMBED_DIM),
-            dropout=nn.Dropout(DROPOUT_PROB),
-            hidden_state=nn.ModuleList([TransformerBlock(max_seq_len) for _ in range(NUM_BLOCKS)]),
-            layer_norm_feedforward=nn.LayerNorm(EMBED_DIM),
-        ))
+        self.transformer = Transformer(vocab_size, max_seq_len)
         self.language_modeling_head = nn.Linear(EMBED_DIM, vocab_size, bias=False)
 
         # init all weights, and apply a special scaled init to the residual projections, per GPT-2 paper
