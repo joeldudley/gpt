@@ -28,6 +28,7 @@ class Transformer(nn.Module):
         return self.layer_norm_feedforward(x)
 
     def init_weights(self):
-        for param_name, param in self.hidden_state.named_parameters():
-            if param_name.endswith('c_proj.weight'):
-                torch.nn.init.normal_(param, mean=0.0, std=0.02 / math.sqrt(2 * NUM_BLOCKS))
+        for block in self.hidden_state:
+            for param_name, param in block.feedforward.c_proj.named_parameters():
+                if param_name == 'weight':
+                    torch.nn.init.normal_(param, mean=0.0, std=0.02 / math.sqrt(2 * NUM_BLOCKS))
