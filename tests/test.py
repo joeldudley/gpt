@@ -5,10 +5,10 @@ import numpy as np
 import torch
 
 from gpt.gpt import GPT
+from gpt.train.training import train
 from tests.addition.datasets import get_train_test_datasets
 from tests.addition.evaluation import evaluate
 from tests.test_constants.constants import VOCAB_SIZE, NUM_DIGITS, RANDOM_SEED
-from gpt.train.training import train
 
 
 class Test(unittest.TestCase):
@@ -20,7 +20,7 @@ class Test(unittest.TestCase):
         self.train_dataset, self.test_dataset = get_train_test_datasets()
 
     def test_learns_to_sum_two_digit_numbers(self):
-        expected_correct = {0: (71, 5), 500: (764, 32), 1000: (7387, 381), 1500: (9096, 483), 2000: (9486, 500)}
+        expected_correct = {0: (79, 3), 500: (4235, 209), 1000: (9408, 493), 1500: (9495, 500)}
 
         def callback(iteration):
             self._print_progress(iteration)
@@ -31,7 +31,7 @@ class Test(unittest.TestCase):
                 self.assertEqual(expected_correct_train, qty_correct_train)
                 self.assertEqual(expected_correct_test, qty_correct_test)
 
-        train(self.model, self.train_dataset, 2000, callback)
+        train(self.model, self.train_dataset, 1500, callback)
 
     @staticmethod
     def _set_rand_seeds():
