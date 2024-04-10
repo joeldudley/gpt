@@ -52,6 +52,6 @@ class GPT(nn.Module):
 
     @staticmethod
     def _get_loss(logits, targets):
-        if targets is not None:
-            return functional.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-1)
-        return None
+        if targets is None:
+            return None
+        return functional.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-1)
