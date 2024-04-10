@@ -20,12 +20,12 @@ class Transformer(nn.Module):
         _, seq_len = inputs.size()
         position = torch.arange(0, seq_len, dtype=torch.long, device=inputs.device).unsqueeze(0)
 
-        token_embedding = self.token_embedding_weights(inputs)
+        token_embeddings = self.token_embedding_weights(inputs)
         position_embeddings = self.position_embedding_weights(position)
-        x = self.dropout(token_embedding + position_embeddings)
+        block_outputs = self.dropout(token_embeddings + position_embeddings)
         for transformer_block in self.transformer_blocks:
-            x = transformer_block(x)
-        return self.layer_norm_feedforward(x)
+            block_outputs = transformer_block(block_outputs)
+        return self.layer_norm_feedforward(block_outputs)
 
     def init_weights(self):
         for block in self.transformer_blocks:
