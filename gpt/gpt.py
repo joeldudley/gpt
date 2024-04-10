@@ -16,7 +16,7 @@ class GPT(nn.Module):
 
         # init all weights, and apply a special scaled init to the residual projections, per GPT-2 paper
         self.apply(self._init_weights)
-        self.transformer.init_weights()
+        self.transformer.init_residual_projection_weights()
 
     def forward(self, inputs, targets=None):
         transformer_outputs = self.transformer(inputs)
@@ -25,21 +25,18 @@ class GPT(nn.Module):
 
     @torch.no_grad()
     def generate(self, inputs, max_new_tokens, temperature=1.0):
+        tokens = inputs
         for _ in range(max_new_tokens):
-            # if the sequence context is growing too long we must crop it at max_seq_len
-            cropped_inputs = inputs if inputs.size(1) <= self.max_seq_len else inputs[:, -self.max_seq_len:]
-            # forward the model to get the logits for the index in the sequence
-            logits, _ = self(cropped_inputs)
-            # pluck the logits at the final step and scale by desired temperature
-            scaled_logits = logits[:, -1, :] / temperature
-            # apply softmax to convert logits to (normalized) probabilities
-            probs = functional.softmax(scaled_logits, dim=-1)
-            # take the most likely element
-            _, idx_next = torch.topk(probs, k=1, dim=-1)
-            # append sampled index to the running sequence and continue
-            inputs = torch.cat((inputs, idx_next), dim=1)
+            tokens = self.generate_token(tokens, temperature)
+        return tokens
 
-        return inputs
+    def generate_token(self, prev_tokens, temperature):
+        cropped_tokens = prev_tokens if prev_tokens.size(1) <= self.max_seq_len else prev_tokens[:, -self.max_seq_len:]
+        logits, _ = self(cropped_tokens)
+        scaled_logits = logits[:, -1, :] / temperature
+        probabilities = functional.softmax(scaled_logits, dim=-1)
+        _, next_token = torch.topk(probabilities, k=1, dim=-1)
+        return torch.cat((prev_tokens, next_token), dim=1)
 
     @staticmethod
     def _init_weights(module):
