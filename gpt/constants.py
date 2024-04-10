@@ -1,4 +1,5 @@
 BATCH_SIZE = 64
+DEVICE = 'cpu'
 # Drop 10%
 DROPOUT_PROB = 0.1
 # The width of the embedding vectors

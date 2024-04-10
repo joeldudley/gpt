@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data.dataloader import DataLoader
 
-from tests.test_constants.constants import NUM_DIGITS
+from tests.test_constants.constants import NUM_DIGITS, DEVICE
 
 
 def evaluate(model, train_dataset, test_dataset):
@@ -20,7 +20,7 @@ def _evaluate_dataset(model, dataset):
 
     total_correct = 0
     for _, (inputs, _) in enumerate(loader):
-        total_correct += _qty_correct(model, inputs.to('cpu'), factors)
+        total_correct += _qty_correct(model, inputs.to(DEVICE), factors)
 
     return total_correct
 

@@ -33,8 +33,7 @@ class GPT(nn.Module):
         cropped_tokens = prev_tokens if prev_tokens.size(1) <= self.max_seq_len else prev_tokens[:, -self.max_seq_len:]
         logits, _ = self(cropped_tokens)  # We skip the scaling of logits by temperature in the original GPT-2 paper.
         probabilities = softmax(logits[:, -1, :], dim=-1)
-        _, next_token = torch.topk(probabilities, k=1)
-        return next_token
+        return torch.topk(probabilities, k=1)[1]
 
     @staticmethod
     def _init_weights(module):
