@@ -14,9 +14,7 @@ class GPT(nn.Module):
         self.transformer = Transformer(vocab_size, max_seq_len)
         self.language_modeling_head = nn.Linear(EMBED_DIM, vocab_size, bias=False)
 
-        # init all weights, and apply a special scaled init to the residual projections, per GPT-2 paper
         self.apply(self._init_weights)
-        self.transformer.init_residual_projection_weights()
 
     def forward(self, inputs, targets=None):
         transformer_outputs = self.transformer(inputs)
@@ -40,6 +38,7 @@ class GPT(nn.Module):
 
     @staticmethod
     def _init_weights(module):
+        # NB: We skip the special scaling of residual layer weights in the original GPT-2 paper.
         if isinstance(module, nn.Linear):
             torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
             if module.bias is not None:

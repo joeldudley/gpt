@@ -20,7 +20,7 @@ class Test(unittest.TestCase):
         self.train_dataset, self.test_dataset = get_train_test_datasets()
 
     def test_learns_to_sum_two_digit_numbers(self):
-        expected_correct = {0: (79, 9), 500: (462, 22), 1000: (5643, 307), 1500: (9379, 493), 2000: (9500, 500)}
+        expected_correct = {0: (71, 5), 500: (764, 32), 1000: (7387, 381), 1500: (9096, 483), 2000: (9486, 500)}
 
         def callback(iteration):
             self._print_progress(iteration)
@@ -46,7 +46,6 @@ class Test(unittest.TestCase):
             share_correct_train = 100 * qty_correct_train / len(self.train_dataset)
             share_correct_test = 100 * qty_correct_test / len(self.test_dataset)
 
-            print()
             print("Iteration", iteration)
             print("Train score: %.2f%% correct (%d/%d)" % (
                 share_correct_train, qty_correct_train, len(self.train_dataset)))

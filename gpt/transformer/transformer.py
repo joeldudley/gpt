@@ -1,5 +1,3 @@
-import math
-
 import torch
 import torch.nn as nn
 
@@ -26,10 +24,3 @@ class Transformer(nn.Module):
         for transformer_block in self.transformer_blocks:
             block_outputs = transformer_block(block_outputs)
         return self.layer_norm_feedforward(block_outputs)
-
-    def init_residual_projection_weights(self):
-        weight_std = 0.02 / math.sqrt(2 * len(self.transformer_blocks))
-        for block in self.transformer_blocks:
-            for param_name, param in block.feedforward.residual_projections.named_parameters():
-                if param_name == 'weight':
-                    torch.nn.init.normal_(param, mean=0.0, std=weight_std)
