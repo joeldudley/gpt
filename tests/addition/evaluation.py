@@ -27,9 +27,7 @@ def _evaluate_dataset(model, dataset):
 
 def _qty_correct(model, digits, factors):
     digits_12 = digits[:, :NUM_DIGITS * 2]
-    # todo - joel - what does this mean?
-    # using greedy argmax, not sampling
-    digits_123 = model.generate(digits_12, NUM_DIGITS + 1, do_sample=False)
+    digits_123 = model.generate(digits_12, NUM_DIGITS + 1)
     digits_3 = digits_123[:, -(NUM_DIGITS + 1):].flip(1)
 
     digits_1_int = (digits_12[:, :NUM_DIGITS] * factors[:, 1:]).sum(1)
