@@ -20,7 +20,8 @@ class GPT(nn.Module):
     def forward(self, inputs, targets=None):
         transformer_outputs = self.transformer(inputs)
         logits = self.language_modeling_head(transformer_outputs)
-        return logits, self._get_loss(logits, targets)
+        loss = None if targets is None else self._get_loss(logits, targets)
+        return logits, loss
 
     @torch.no_grad()
     def generate(self, inputs, max_new_tokens):
@@ -51,5 +52,4 @@ class GPT(nn.Module):
 
     @staticmethod
     def _get_loss(logits, targets):
-        return None if targets is None \
-            else cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-1)
+        return cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-1)
