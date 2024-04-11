@@ -16,7 +16,7 @@ class Test(unittest.TestCase):
         self._set_rand_seeds()
         self.model = GPT(VOCAB_SIZE, 3 * NUM_DIGITS + 1 - 1)
         self.train_dataset, self.test_dataset = get_train_test_datasets()
-        self.evaluator = Evaluator(self.train_dataset, self.test_dataset)
+        self.evaluator = Evaluator(self.train_dataset, self.test_dataset, self.model)
 
     def test_learns_to_sum_two_digit_numbers(self):
         expected_correct = {0: (79, 3), 500: (4235, 209), 1000: (9408, 493), 1500: (9495, 500)}
@@ -25,7 +25,7 @@ class Test(unittest.TestCase):
             self._print_progress(iteration)
 
             if iteration in expected_correct:
-                qty_correct_train, qty_correct_test = self.evaluator.evaluate(self.model)
+                qty_correct_train, qty_correct_test = self.evaluator.evaluate()
                 expected_correct_train, expected_correct_test = expected_correct[iteration]
                 self.assertEqual(expected_correct_train, qty_correct_train)
                 self.assertEqual(expected_correct_test, qty_correct_test)
@@ -41,7 +41,7 @@ class Test(unittest.TestCase):
 
     def _print_progress(self, iteration):
         if iteration % 500 == 0:
-            qty_correct_train, qty_correct_test = self.evaluator.evaluate(self.model)
+            qty_correct_train, qty_correct_test = self.evaluator.evaluate()
             share_correct_train = 100 * qty_correct_train / len(self.train_dataset)
             share_correct_test = 100 * qty_correct_test / len(self.test_dataset)
 
