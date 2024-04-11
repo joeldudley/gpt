@@ -36,4 +36,4 @@ def _qty_correct(model, inputs, factors):
     digits_3_prediction = (digits_3 * factors).sum(1)
     digits_3_target = digits_1_int + digits_2_int
 
-    return int((digits_3_prediction == digits_3_target).sum())
+    return (digits_3_prediction == digits_3_target).sum()
