@@ -7,20 +7,18 @@ from tests.test_constants.constants import NUM_DIGITS
 class Evaluator:
     def __init__(self, train_dataset, test_dataset):
         self.powers_of_ten = torch.tensor([[10 ** i for i in range(NUM_DIGITS + 1)][::-1]])
-        self.train_dataset = train_dataset
-        self.test_dataset = test_dataset
+        self.train_loader = DataLoader(train_dataset, batch_size=100)
+        self.test_loader = DataLoader(test_dataset, batch_size=100)
 
     def evaluate(self, model):
         model.eval()
         with torch.no_grad():
-            qty_correct_train = self._evaluate_dataset(model, self.train_dataset)
-            qty_correct_test = self._evaluate_dataset(model, self.test_dataset)
+            qty_correct_train = self._evaluate_dataset(model, self.train_loader)
+            qty_correct_test = self._evaluate_dataset(model, self.test_loader)
         model.train()
-
         return qty_correct_train, qty_correct_test
 
-    def _evaluate_dataset(self, model, dataset):
-        loader = DataLoader(dataset, batch_size=100, num_workers=0, drop_last=False)
+    def _evaluate_dataset(self, model, loader):
         return sum([self._qty_correct(model, inputs) for _, (inputs, _) in enumerate(loader)])
 
     def _qty_correct(self, model, inputs):

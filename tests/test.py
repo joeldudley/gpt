@@ -14,9 +14,7 @@ from tests.test_constants.constants import VOCAB_SIZE, NUM_DIGITS, RANDOM_SEED
 class Test(unittest.TestCase):
     def setUp(self):
         self._set_rand_seeds()
-
-        max_seq_len = 3 * NUM_DIGITS + 1 - 1
-        self.model = GPT(VOCAB_SIZE, max_seq_len)
+        self.model = GPT(VOCAB_SIZE, 3 * NUM_DIGITS + 1 - 1)
         self.train_dataset, self.test_dataset = get_train_test_datasets()
         self.evaluator = Evaluator(self.train_dataset, self.test_dataset)
 
