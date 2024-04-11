@@ -1,14 +1,14 @@
 import torch
 from torch.utils.data.dataloader import DataLoader
 
-from tests.test_constants.constants import NUM_DIGITS
+from tests.test_constants.constants import NUM_DIGITS, BATCH_SIZE
 
 
 class Evaluator:
     def __init__(self, train_dataset, test_dataset):
         self.powers_of_ten = torch.tensor([[10 ** i for i in range(NUM_DIGITS + 1)][::-1]])
-        self.train_loader = DataLoader(train_dataset, batch_size=100)
-        self.test_loader = DataLoader(test_dataset, batch_size=100)
+        self.train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE)
+        self.test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
 
     def evaluate(self, model):
         model.eval()
