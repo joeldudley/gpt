@@ -17,12 +17,7 @@ def evaluate(model, train_dataset, test_dataset):
 def _evaluate_dataset(model, dataset):
     factors = torch.tensor([[10 ** i for i in range(NUM_DIGITS + 1)][::-1]])
     loader = DataLoader(dataset, batch_size=100, num_workers=0, drop_last=False)
-
-    total_correct = 0
-    for _, (inputs, _) in enumerate(loader):
-        total_correct += _qty_correct(model, inputs, factors)
-
-    return total_correct
+    return sum([_qty_correct(model, inputs, factors) for _, (inputs, _) in enumerate(loader)])
 
 
 # TODO: Use the targets to get the correct result, rather than recalculating
