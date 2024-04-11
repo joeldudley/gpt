@@ -33,5 +33,6 @@ class Evaluator:
     def _get_prediction(self, inputs):
         digits_12 = inputs[:, :NUM_DIGITS * 2]
         digits_123 = self.model.generate(digits_12, NUM_DIGITS + 1)
-        digits_3 = digits_123[:, -(NUM_DIGITS + 1):].flip(1)
-        return (digits_3 * self.powers_of_ten).sum(1)
+        digits_3 = digits_123[:, -(NUM_DIGITS + 1):]
+        digits_3_unflipped = digits_3.flip(1)
+        return (digits_3_unflipped * self.powers_of_ten).sum(1)
