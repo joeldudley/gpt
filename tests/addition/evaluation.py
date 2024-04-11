@@ -15,7 +15,7 @@ def evaluate(model, train_dataset, test_dataset):
 
 
 def _evaluate_dataset(model, dataset):
-    factors = torch.tensor([[10 ** i for i in range(NUM_DIGITS + 1)][::-1]]).to('cpu')
+    factors = torch.tensor([[10 ** i for i in range(NUM_DIGITS + 1)][::-1]]).to(DEVICE)
     loader = DataLoader(dataset, batch_size=100, num_workers=0, drop_last=False)
 
     total_correct = 0
