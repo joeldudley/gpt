@@ -26,8 +26,8 @@ def _evaluate_dataset(model, dataset):
 
 
 # TODO: Use the targets to get the correct result, rather than recalculating
-def _qty_correct(model, digits, factors):
-    digits_12 = digits[:, :NUM_DIGITS * 2]
+def _qty_correct(model, inputs, factors):
+    digits_12 = inputs[:, :NUM_DIGITS * 2]
     digits_123 = model.generate(digits_12, NUM_DIGITS + 1)
     digits_3 = digits_123[:, -(NUM_DIGITS + 1):].flip(1)
 
