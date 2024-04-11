@@ -21,13 +21,13 @@ def _evaluate_dataset(model, dataset):
 
 
 def _qty_correct(model, inputs, factors):
+    digits_1_int = (inputs[:, :NUM_DIGITS] * factors[:, 1:]).sum(1)
+    digits_2_int = (inputs[:, NUM_DIGITS:NUM_DIGITS * 2] * factors[:, 1:]).sum(1)
+    target = digits_1_int + digits_2_int
+
     digits_12 = inputs[:, :NUM_DIGITS * 2]
     digits_123 = model.generate(digits_12, NUM_DIGITS + 1)
     digits_3 = digits_123[:, -(NUM_DIGITS + 1):].flip(1)
+    prediction = (digits_3 * factors).sum(1)
 
-    digits_1_int = (digits_12[:, :NUM_DIGITS] * factors[:, 1:]).sum(1)
-    digits_2_int = (digits_12[:, NUM_DIGITS:NUM_DIGITS * 2] * factors[:, 1:]).sum(1)
-    digits_3_prediction = (digits_3 * factors).sum(1)
-    digits_3_target = digits_1_int + digits_2_int
-
-    return (digits_3_prediction == digits_3_target).sum()
+    return (prediction == target).sum()
