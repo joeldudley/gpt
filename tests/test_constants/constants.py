@@ -1,4 +1,3 @@
-DEVICE = 'cpu'
 # The maximum size of the test set
 MAX_TEST_SET_SIZE = 500
 # The number of digits in the numbers we're adding

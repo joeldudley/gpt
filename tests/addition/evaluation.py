@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data.dataloader import DataLoader
 
-from tests.test_constants.constants import NUM_DIGITS, DEVICE
+from tests.test_constants.constants import NUM_DIGITS
 
 
 def evaluate(model, train_dataset, test_dataset):
@@ -15,12 +15,12 @@ def evaluate(model, train_dataset, test_dataset):
 
 
 def _evaluate_dataset(model, dataset):
-    factors = torch.tensor([[10 ** i for i in range(NUM_DIGITS + 1)][::-1]]).to(DEVICE)
+    factors = torch.tensor([[10 ** i for i in range(NUM_DIGITS + 1)][::-1]])
     loader = DataLoader(dataset, batch_size=100, num_workers=0, drop_last=False)
 
     total_correct = 0
     for _, (inputs, _) in enumerate(loader):
-        total_correct += _qty_correct(model, inputs.to(DEVICE), factors)
+        total_correct += _qty_correct(model, inputs, factors)
 
     return total_correct
 
@@ -35,4 +35,4 @@ def _qty_correct(model, digits, factors):
     digits_3_prediction = (digits_3 * factors).sum(1)
     digits_3_target = digits_1_int + digits_2_int
 
-    return int((digits_3_prediction == digits_3_target).cpu().sum())
+    return int((digits_3_prediction == digits_3_target).sum())
