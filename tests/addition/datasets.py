@@ -18,7 +18,7 @@ class SimpleDataset(Dataset):
 
 def get_train_test_datasets():
     dataset_size = (10 ** NUM_DIGITS) ** 2
-    test_set_size = min(int(dataset_size * 0.2), MAX_TEST_SET_SIZE)  # 20% of the whole dataset, max. 500
+    test_set_size = min(int(dataset_size * 0.2), MAX_TEST_SET_SIZE)  # 20% of the whole dataset, max. 500.
 
     samples = _get_all_samples(NUM_DIGITS, dataset_size)
     return SimpleDataset(samples[test_set_size:]), SimpleDataset(samples[:test_set_size])
@@ -37,13 +37,11 @@ def _get_sample(number_pair, num_digits):
 
     a_str = str(a).zfill(num_digits)
     b_str = str(b).zfill(num_digits)
-    target_str = str(target).zfill(num_digits + 1)[::-1]  # It's easier to learn addition if the sum is flipped
+    target_str = str(target).zfill(num_digits + 1)[::-1]  # It's easier to learn addition if the sum is flipped.
 
     samples = [int(s) for s in a_str + b_str + target_str]
     inputs = torch.tensor(samples[:-1], dtype=torch.long)
     targets = torch.tensor(samples[1:], dtype=torch.long)
-    # todo - joel - what does this mean?
-    # we will only train in the output locations. -1 will mask loss to zero
     targets[:num_digits * 2 - 1] = -1
 
-    return inputs, targets
+    return inputs, targets  # e.g. `96 + 29 = 125` becomes inputs = [9, 6, 2, 9, 5, 2]; targets = [-1, -1, -1, 5, 2, 1]
