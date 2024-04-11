@@ -20,7 +20,6 @@ def _evaluate_dataset(model, dataset):
     return sum([_qty_correct(model, inputs, factors) for _, (inputs, _) in enumerate(loader)])
 
 
-# TODO: Use the targets to get the correct result, rather than recalculating
 def _qty_correct(model, inputs, factors):
     digits_12 = inputs[:, :NUM_DIGITS * 2]
     digits_123 = model.generate(digits_12, NUM_DIGITS + 1)
