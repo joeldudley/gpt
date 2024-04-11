@@ -7,7 +7,7 @@ import torch
 from gpt.gpt import GPT
 from gpt.train.training import train
 from tests.addition.datasets import get_train_test_datasets
-from tests.addition.evaluation import evaluate
+from tests.addition.evaluator import Evaluator
 from tests.test_constants.constants import VOCAB_SIZE, NUM_DIGITS, RANDOM_SEED
 
 
@@ -18,6 +18,7 @@ class Test(unittest.TestCase):
         max_seq_len = 3 * NUM_DIGITS + 1 - 1
         self.model = GPT(VOCAB_SIZE, max_seq_len)
         self.train_dataset, self.test_dataset = get_train_test_datasets()
+        self.evaluator = Evaluator(self.train_dataset, self.test_dataset)
 
     def test_learns_to_sum_two_digit_numbers(self):
         expected_correct = {0: (79, 3), 500: (4235, 209), 1000: (9408, 493), 1500: (9495, 500)}
@@ -26,7 +27,7 @@ class Test(unittest.TestCase):
             self._print_progress(iteration)
 
             if iteration in expected_correct:
-                qty_correct_train, qty_correct_test = evaluate(self.model, self.train_dataset, self.test_dataset)
+                qty_correct_train, qty_correct_test = self.evaluator.evaluate(self.model)
                 expected_correct_train, expected_correct_test = expected_correct[iteration]
                 self.assertEqual(expected_correct_train, qty_correct_train)
                 self.assertEqual(expected_correct_test, qty_correct_test)
@@ -42,7 +43,7 @@ class Test(unittest.TestCase):
 
     def _print_progress(self, iteration):
         if iteration % 500 == 0:
-            qty_correct_train, qty_correct_test = evaluate(self.model, self.train_dataset, self.test_dataset)
+            qty_correct_train, qty_correct_test = self.evaluator.evaluate(self.model)
             share_correct_train = 100 * qty_correct_train / len(self.train_dataset)
             share_correct_test = 100 * qty_correct_test / len(self.test_dataset)
 
