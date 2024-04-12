@@ -31,7 +31,8 @@ class MultiHeadAttention(nn.Module):
 
         outputs = attn_with_dropout @ value_per_head
         outputs_per_head = outputs.transpose(1, 2).contiguous().view(batch_size, seq_len, EMBED_DIM)
-        return self.resid_dropout(self.output_projection(outputs_per_head))
+        output_projection = self.output_projection(outputs_per_head)
+        return self.resid_dropout(output_projection)
 
     @staticmethod
     def _split_by_head(vector, batch_size, seq_len):
