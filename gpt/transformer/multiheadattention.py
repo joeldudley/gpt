@@ -19,10 +19,10 @@ class MultiHeadAttention(nn.Module):
     def forward(self, inputs):
         batch_size, seq_len, _ = inputs.size()
 
-        query_vec_raw, key_vec_raw, value_vec_raw = self.keys_queries_values(inputs).split(EMBED_DIM, dim=2)
-        query_vec = self._create_view(query_vec_raw, batch_size, seq_len)
-        key_vec = self._create_view(key_vec_raw, batch_size, seq_len)
-        value_vec = self._create_view(value_vec_raw, batch_size, seq_len)
+        query_vec_full, key_vec_full, value_vec_full = self.keys_queries_values(inputs).split(EMBED_DIM, dim=2)
+        query_vec = self._split_by_head(query_vec_full, batch_size, seq_len)
+        key_vec = self._split_by_head(key_vec_full, batch_size, seq_len)
+        value_vec = self._split_by_head(value_vec_full, batch_size, seq_len)
 
         attn = (query_vec @ key_vec.transpose(-2, -1)) * (1.0 / math.sqrt(key_vec.size(-1)))
         attn_masked = attn.masked_fill(self.mask[:, :, :seq_len, :seq_len] == 0, float('-inf'))
@@ -34,5 +34,5 @@ class MultiHeadAttention(nn.Module):
         return self.resid_dropout(self.output_projection(outputs))
 
     @staticmethod
-    def _create_view(vector, batch_size, seq_len):
+    def _split_by_head(vector, batch_size, seq_len):
         return vector.view(batch_size, seq_len, NUM_ATTN_HEADS, EMBED_DIM // NUM_ATTN_HEADS).transpose(1, 2)

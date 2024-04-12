@@ -8,8 +8,8 @@ from gpt.transformer.transformerblock import TransformerBlock
 class Transformer(nn.Module):
     def __init__(self, vocab_size, max_seq_len):
         super().__init__()
-        self.position_embedding_weights = nn.Embedding(max_seq_len, EMBED_DIM)
         self.token_embedding_weights = nn.Embedding(vocab_size, EMBED_DIM)
+        self.position_embedding_weights = nn.Embedding(max_seq_len, EMBED_DIM)
         self.dropout = nn.Dropout(DROPOUT_PROB)
         self.transformer_blocks = nn.ModuleList([TransformerBlock(max_seq_len) for _ in range(NUM_BLOCKS)])
         self.layer_norm_feedforward = nn.LayerNorm(EMBED_DIM)
