@@ -16,7 +16,7 @@ class Transformer(nn.Module):
 
     def forward(self, inputs):
         _, seq_len = inputs.size()
-        position = torch.arange(0, seq_len, dtype=torch.long, device=inputs.device).unsqueeze(0)
+        position = torch.arange(0, seq_len).unsqueeze(0)
 
         token_embeddings = self.token_embedding_weights(inputs)
         position_embeddings = self.position_embedding_weights(position)
