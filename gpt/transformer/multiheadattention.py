@@ -19,19 +19,19 @@ class MultiHeadAttention(nn.Module):
     def forward(self, inputs):
         batch_size, seq_len, _ = inputs.size()
 
-        query_vec_full, key_vec_full, value_vec_full = self.keys_queries_values(inputs).split(EMBED_DIM, dim=2)
-        query_vec = self._split_by_head(query_vec_full, batch_size, seq_len)
-        key_vec = self._split_by_head(key_vec_full, batch_size, seq_len)
-        value_vec = self._split_by_head(value_vec_full, batch_size, seq_len)
+        query, key, value = self.keys_queries_values(inputs).split(EMBED_DIM, dim=2)
+        query_per_head = self._split_by_head(query, batch_size, seq_len)
+        key_per_head = self._split_by_head(key, batch_size, seq_len)
+        value_per_head = self._split_by_head(value, batch_size, seq_len)
 
-        attn = (query_vec @ key_vec.transpose(-2, -1)) * (1.0 / math.sqrt(key_vec.size(-1)))
+        attn = (query_per_head @ key_per_head.transpose(-2, -1)) * (1.0 / math.sqrt(key_per_head.size(-1)))
         attn_masked = attn.masked_fill(self.mask[:, :, :seq_len, :seq_len] == 0, float('-inf'))
         attn_softmaxed = softmax(attn_masked, dim=-1)
         attn_with_dropout = self.attn_dropout(attn_softmaxed)
 
-        outputs_raw = attn_with_dropout @ value_vec
-        outputs = outputs_raw.transpose(1, 2).contiguous().view(batch_size, seq_len, EMBED_DIM)
-        return self.resid_dropout(self.output_projection(outputs))
+        outputs = attn_with_dropout @ value_per_head
+        outputs_per_head = outputs.transpose(1, 2).contiguous().view(batch_size, seq_len, EMBED_DIM)
+        return self.resid_dropout(self.output_projection(outputs_per_head))
 
     @staticmethod
     def _split_by_head(vector, batch_size, seq_len):
