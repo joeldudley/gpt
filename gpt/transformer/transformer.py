@@ -17,9 +17,9 @@ class Transformer(nn.Module):
     def forward(self, inputs):
         _, seq_len = inputs.size()
         position = torch.arange(0, seq_len).unsqueeze(0)
+        position_embeddings = self.position_embedding_weights(position)
 
         token_embeddings = self.token_embedding_weights(inputs)
-        position_embeddings = self.position_embedding_weights(position)
         block_outputs = self.dropout(token_embeddings + position_embeddings)
         for transformer_block in self.transformer_blocks:
             block_outputs = transformer_block(block_outputs)
