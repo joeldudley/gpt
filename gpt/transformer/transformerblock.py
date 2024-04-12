@@ -19,4 +19,5 @@ class TransformerBlock(nn.Module):
         attn_outputs_with_skip = attn_outputs + inputs
         attn_outputs_normed = self.norm_2(attn_outputs_with_skip)
         feedforward_outputs = self.feedforward(attn_outputs_normed)
-        return feedforward_outputs + attn_outputs_with_skip
+        feedforward_outputs_with_skip = feedforward_outputs + attn_outputs_with_skip
+        return feedforward_outputs_with_skip
