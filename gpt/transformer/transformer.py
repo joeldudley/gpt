@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from torch.nn import init
 
 from gpt.constants import EMBED_DIM, DROPOUT_PROB, NUM_BLOCKS
 from gpt.transformer.transformerblock import TransformerBlock
@@ -13,6 +14,11 @@ class Transformer(nn.Module):
         self.dropout = nn.Dropout(DROPOUT_PROB)
         self.transformer_blocks = nn.ModuleList([TransformerBlock(max_seq_len) for _ in range(NUM_BLOCKS)])
         self.layer_norm_feedforward = nn.LayerNorm(EMBED_DIM)
+
+        init.normal_(self.token_embedding_weights.weight, std=0.02)
+        init.normal_(self.position_embedding_weights.weight, std=0.02)
+        init.zeros_(self.layer_norm_feedforward.bias)
+        init.ones_(self.layer_norm_feedforward.weight)
 
     def forward(self, inputs):
         _, seq_len = inputs.size()

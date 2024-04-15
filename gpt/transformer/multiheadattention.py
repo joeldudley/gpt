@@ -2,6 +2,7 @@ import math
 
 import torch
 import torch.nn as nn
+from torch.nn import init
 from torch.nn.functional import softmax
 
 from gpt.constants import EMBED_DIM, NUM_ATTN_HEADS, DROPOUT_PROB
@@ -15,6 +16,11 @@ class MultiHeadAttention(nn.Module):
         self.attn_dropout = nn.Dropout(DROPOUT_PROB)
         self.resid_dropout = nn.Dropout(DROPOUT_PROB)
         self.mask = torch.tril(torch.ones(max_seq_len, max_seq_len)).view(1, 1, max_seq_len, max_seq_len)
+
+        init.normal_(self.keys_queries_values.weight, std=0.02)
+        init.zeros_(self.keys_queries_values.bias)
+        init.normal_(self.output_projection.weight, std=0.02)
+        init.zeros_(self.output_projection.bias)
 
     def forward(self, inputs):
         batch_size, seq_len, _ = inputs.size()

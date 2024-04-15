@@ -14,7 +14,7 @@ class GPT(nn.Module):
         self.transformer = Transformer(vocab_size, max_seq_len)
         self.language_modeling_head = nn.Linear(EMBED_DIM, vocab_size, bias=False)
 
-        self.apply(self._init_weights)
+        init.normal_(self.language_modeling_head.weight, std=0.02)
 
     def forward(self, inputs, targets=None):
         transformer_outputs = self.transformer.forward(inputs)
@@ -26,29 +26,14 @@ class GPT(nn.Module):
     def generate(self, inputs, num_tokens_to_generate):
         tokens = inputs
         for _ in range(num_tokens_to_generate):
-            tokens = torch.cat((tokens, self.generate_token(tokens)), dim=1)
+            tokens = torch.cat((tokens, self._generate_token(tokens)), dim=1)
         return tokens
 
-    def generate_token(self, prev_tokens):
+    def _generate_token(self, prev_tokens):
         cropped_tokens = prev_tokens if prev_tokens.size(1) <= self.max_seq_len else prev_tokens[:, -self.max_seq_len:]
         logits, _ = self.forward(cropped_tokens)  # Skip the scaling of logits by temp. from the original GPT-2 paper.
         probabilities = softmax(logits[:, -1, :], dim=-1)
         return torch.topk(probabilities, k=1)[1]
-
-    @staticmethod
-    def _init_weights(module):
-        # TODO - Consider initialising weights in each component, to make things clearer
-        # We skip the special scaling of residual layer weights in the original GPT-2 paper.
-        match module:
-            case nn.Linear():
-                init.normal_(module.weight, std=0.02)
-                if module.bias is not None:
-                    init.zeros_(module.bias)
-            case nn.Embedding():
-                init.normal_(module.weight, std=0.02)
-            case nn.LayerNorm():
-                init.zeros_(module.bias)
-                init.ones_(module.weight)
 
     @staticmethod
     def _get_loss(logits, targets):
