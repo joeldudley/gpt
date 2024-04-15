@@ -10,14 +10,16 @@ class TransformerBlock(nn.Module):
     def __init__(self, max_seq_len):
         super().__init__()
         self.norm_inputs = nn.LayerNorm(EMBED_DIM)
-        self.multi_head_attention = MultiHeadAttention(max_seq_len)
-        self.norm_multi_head_attention = nn.LayerNorm(EMBED_DIM)
-        self.feedforward = TransformerBlockFeedForward()
-
         init.zeros_(self.norm_inputs.bias)
         init.ones_(self.norm_inputs.weight)
+
+        self.multi_head_attention = MultiHeadAttention(max_seq_len)
+
+        self.norm_multi_head_attention = nn.LayerNorm(EMBED_DIM)
         init.zeros_(self.norm_multi_head_attention.bias)
         init.ones_(self.norm_multi_head_attention.weight)
+
+        self.feedforward = TransformerBlockFeedForward()
 
     def forward(self, inputs):
         inputs_normed = self.norm_inputs.forward(inputs)

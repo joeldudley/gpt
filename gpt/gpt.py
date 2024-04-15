@@ -12,8 +12,8 @@ class GPT(nn.Module):
         super().__init__()
         self.max_seq_len = max_seq_len
         self.transformer = Transformer(vocab_size, max_seq_len)
-        self.language_modeling_head = nn.Linear(EMBED_DIM, vocab_size, bias=False)
 
+        self.language_modeling_head = nn.Linear(EMBED_DIM, vocab_size, bias=False)
         init.normal_(self.language_modeling_head.weight, std=0.02)
 
     def forward(self, inputs, targets=None):
