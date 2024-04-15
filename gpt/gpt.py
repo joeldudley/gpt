@@ -31,12 +31,13 @@ class GPT(nn.Module):
 
     def generate_token(self, prev_tokens):
         cropped_tokens = prev_tokens if prev_tokens.size(1) <= self.max_seq_len else prev_tokens[:, -self.max_seq_len:]
-        logits, _ = self.forward(cropped_tokens)  # Skip the scaling of logits by temp., as in the original GPT-2 paper.
+        logits, _ = self.forward(cropped_tokens)  # Skip the scaling of logits by temp. from the original GPT-2 paper.
         probabilities = softmax(logits[:, -1, :], dim=-1)
         return torch.topk(probabilities, k=1)[1]
 
     @staticmethod
     def _init_weights(module):
+        # TODO - Consider initialising weights in each component, to make things clearer
         # We skip the special scaling of residual layer weights in the original GPT-2 paper.
         match module:
             case nn.Linear():
