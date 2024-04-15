@@ -23,8 +23,7 @@ class GPT(nn.Module):
         return logits, loss
 
     @torch.no_grad()
-    def generate(self, inputs, num_tokens_to_generate):
-        tokens = inputs
+    def generate(self, tokens, num_tokens_to_generate):
         for _ in range(num_tokens_to_generate):
             tokens = torch.cat((tokens, self._generate_token(tokens)), dim=1)
         return tokens
