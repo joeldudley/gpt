@@ -28,12 +28,12 @@ class GPT(nn.Module):
             tokens = torch.cat((tokens, self._generate_token(tokens)), dim=1)
         return tokens
 
+    @staticmethod
+    def _get_loss(logits, targets):
+        return cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-1)
+
     def _generate_token(self, prev_tokens):
         cropped_tokens = prev_tokens if prev_tokens.size(1) <= self.max_seq_len else prev_tokens[:, -self.max_seq_len:]
         logits, _ = self.forward(cropped_tokens)  # Skip the scaling of logits by temp. from the original GPT-2 paper.
         probabilities = softmax(logits[:, -1, :], dim=-1)
-        return torch.topk(probabilities, k=1)[1]
-
-    @staticmethod
-    def _get_loss(logits, targets):
-        return cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-1)
+        return torch.topk(probabilities, 1)[1]
