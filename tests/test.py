@@ -19,7 +19,7 @@ class Test(unittest.TestCase):
         self.evaluator = Evaluator(self.train_dataset, self.test_dataset, self.model)
 
     def test_learns_to_sum_two_digit_numbers(self):
-        expected_correctness = {0: (1, 0), 500: (2608, 262), 1000: (8124, 869), 1500: (8986, 996)}
+        expected_correctness = {0: (1, 0), 500: (2608, 262), 1000: (8124, 896), 1500: (8986, 996)}
 
         def callback(iteration):
             self._print_progress(iteration)
@@ -27,8 +27,8 @@ class Test(unittest.TestCase):
             if iteration in expected_correctness:
                 qty_correct_train, qty_correct_test = self.evaluator.evaluate()
                 expected_correct_train, expected_correct_test = expected_correctness[iteration]
-                # self.assertEqual(expected_correct_train, qty_correct_train)
-                # self.assertEqual(expected_correct_test, qty_correct_test)
+                self.assertEqual(expected_correct_train, qty_correct_train)
+                self.assertEqual(expected_correct_test, qty_correct_test)
 
         train(self.model, self.train_dataset, 1500, callback)
 

@@ -5,18 +5,18 @@ import torch.nn as nn
 from torch.nn import init
 from torch.nn.functional import softmax
 
-from gpt.constants import EMBED_DIM, NUM_ATTN_HEADS, DROPOUT_PROB
+from gpt.constants import EMBED_DIM, NUM_ATTN_HEADS, DROPOUT_PROB, STD
 
 
 class MultiHeadAttention(nn.Module):
     def __init__(self, max_seq_len):
         super().__init__()
         self.keys_queries_values = nn.Linear(EMBED_DIM, NUM_ATTN_HEADS * EMBED_DIM)
-        init.normal_(self.keys_queries_values.weight, std=0.02)
+        init.normal_(self.keys_queries_values.weight, std=STD)
         init.zeros_(self.keys_queries_values.bias)
 
         self.output_projection = nn.Linear(EMBED_DIM, EMBED_DIM)
-        init.normal_(self.output_projection.weight, std=0.02)
+        init.normal_(self.output_projection.weight, std=STD)
         init.zeros_(self.output_projection.bias)
 
         self.attn_dropout = nn.Dropout(DROPOUT_PROB)

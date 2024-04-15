@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from torch.nn import init
 
-from gpt.constants import EMBED_DIM, DROPOUT_PROB, NUM_BLOCKS
+from gpt.constants import EMBED_DIM, DROPOUT_PROB, NUM_BLOCKS, STD
 from gpt.transformer.transformerblock import TransformerBlock
 
 
@@ -10,10 +10,10 @@ class Transformer(nn.Module):
     def __init__(self, vocab_size, max_seq_len):
         super().__init__()
         self.token_embedding_weights = nn.Embedding(vocab_size, EMBED_DIM)
-        init.normal_(self.token_embedding_weights.weight, std=0.02)
+        init.normal_(self.token_embedding_weights.weight, std=STD)
 
         self.position_embedding_weights = nn.Embedding(max_seq_len, EMBED_DIM)
-        init.normal_(self.position_embedding_weights.weight, std=0.02)
+        init.normal_(self.position_embedding_weights.weight, std=STD)
 
         self.dropout = nn.Dropout(DROPOUT_PROB)
         self.transformer_blocks = nn.ModuleList([TransformerBlock(max_seq_len) for _ in range(NUM_BLOCKS)])

@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.nn import init
 from torch.nn.functional import cross_entropy, softmax
 
-from gpt.constants import EMBED_DIM
+from gpt.constants import EMBED_DIM, STD
 from gpt.transformer.transformer import Transformer
 
 
@@ -14,7 +14,7 @@ class GPT(nn.Module):
         self.transformer = Transformer(vocab_size, max_seq_len)
 
         self.language_modeling_head = nn.Linear(EMBED_DIM, vocab_size, bias=False)
-        init.normal_(self.language_modeling_head.weight, std=0.02)
+        init.normal_(self.language_modeling_head.weight, std=STD)
 
     def forward(self, inputs, targets=None):
         transformer_outputs = self.transformer.forward(inputs)

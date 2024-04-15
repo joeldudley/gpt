@@ -20,7 +20,7 @@ class Evaluator:
         return qty_correct_train, qty_correct_test
 
     def _evaluate_dataset(self, loader):
-        return sum([self._qty_correct(inputs) for _, (inputs, _) in enumerate(loader)])
+        return int(sum([self._qty_correct(inputs) for _, (inputs, _) in enumerate(loader)]))
 
     def _qty_correct(self, inputs):
         return (self._get_target(inputs) == self._get_prediction(inputs)).sum()
