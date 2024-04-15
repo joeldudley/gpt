@@ -1,4 +1,5 @@
 import torch.nn as nn
+from torch import Tensor
 from torch.nn import init
 
 from gpt.constants import EMBED_DIM
@@ -7,7 +8,7 @@ from gpt.transformer.transformerblockfeedforward import TransformerBlockFeedForw
 
 
 class TransformerBlock(nn.Module):
-    def __init__(self, max_seq_len):
+    def __init__(self, max_seq_len: int):
         super().__init__()
         self.norm_inputs = nn.LayerNorm(EMBED_DIM)
         init.zeros_(self.norm_inputs.bias)
@@ -21,7 +22,7 @@ class TransformerBlock(nn.Module):
 
         self.feedforward = TransformerBlockFeedForward()
 
-    def forward(self, inputs):
+    def forward(self, inputs: Tensor) -> Tensor:
         inputs_normed = self.norm_inputs.forward(inputs)
         attn_outputs = self.multi_head_attention.forward(inputs_normed)
         attn_outputs_with_skip = attn_outputs + inputs

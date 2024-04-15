@@ -1,4 +1,5 @@
 import torch.nn as nn
+from torch import Tensor
 from torch.nn import init
 
 from gpt.constants import EMBED_DIM, DROPOUT_PROB, STD
@@ -20,7 +21,7 @@ class TransformerBlockFeedForward(nn.Module):
         self.gelu = GaussianErrorLinearUnit()
         self.dropout = nn.Dropout(DROPOUT_PROB)
 
-    def forward(self, inputs):
+    def forward(self, inputs: Tensor) -> Tensor:
         linear_transform = self.output_linear_transform.forward(inputs)
         activations = self.gelu.forward(linear_transform)
         projections = self.residual_projections.forward(activations)
