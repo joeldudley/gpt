@@ -2,7 +2,7 @@ from torch.nn.utils import clip_grad_norm_
 from torch.utils.data import RandomSampler
 from torch.utils.data.dataloader import DataLoader
 
-from gpt.constants import NUM_SAMPLES, BATCH_SIZE, GRAD_NORM_CLIP
+from gpt.constants import NUM_SAMPLES, BATCH_SIZE, MAX_GRAD_NORM
 from gpt.train.optimisation import get_adamw_optimizer
 
 
@@ -25,7 +25,7 @@ def train(model, train_dataset, iterations, batch_end_callback):
 
         model.zero_grad(set_to_none=True)
         loss.backward()
-        clip_grad_norm_(model.parameters(), GRAD_NORM_CLIP)
+        clip_grad_norm_(model.parameters(), MAX_GRAD_NORM)
         optimizer.step()
 
         batch_end_callback(iteration)
