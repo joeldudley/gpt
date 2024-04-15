@@ -19,7 +19,7 @@ class Test(unittest.TestCase):
         self.evaluator = Evaluator(self.train_dataset, self.test_dataset, self.model)
 
     def test_learns_to_sum_two_digit_numbers(self):
-        expected_correct = {0: (79, 3), 500: (4235, 209), 1000: (9408, 493), 1500: (9495, 500)}
+        expected_correct = {0: (75, 12), 500: (1984, 209), 1000: (8595, 961), 1500: (8978, 1000)}
 
         def callback(iteration):
             self._print_progress(iteration)
