@@ -12,8 +12,7 @@ def train(model, train_dataset, iterations, batch_end_callback):
     dataloader = DataLoader(train_dataset, sampler=sampler, shuffle=False, pin_memory=True, batch_size=BATCH_SIZE)
 
     data_iter = iter(dataloader)
-    iteration = 0
-    while iteration <= iterations:
+    for iteration in range(iterations + 1):
         try:
             batch = next(data_iter)
         except StopIteration:
@@ -29,4 +28,3 @@ def train(model, train_dataset, iterations, batch_end_callback):
         optimizer.step()
 
         batch_end_callback(iteration)
-        iteration += 1
