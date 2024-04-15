@@ -8,8 +8,8 @@ from gpt.train.optimisation import get_adamw_optimizer
 
 def train(model, train_dataset, iterations, batch_end_callback):
     optimizer = get_adamw_optimizer(model.named_modules(), model.named_parameters())
-    sampler = RandomSampler(train_dataset, replacement=True, num_samples=NUM_SAMPLES)
-    dataloader = DataLoader(train_dataset, sampler=sampler, shuffle=False, pin_memory=True, batch_size=BATCH_SIZE)
+    dataloader = DataLoader(train_dataset, shuffle=False, pin_memory=True, batch_size=BATCH_SIZE,
+                            sampler=RandomSampler(train_dataset, replacement=True, num_samples=NUM_SAMPLES))
 
     data_iter = iter(dataloader)
     for iteration in range(iterations + 1):
