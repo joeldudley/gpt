@@ -8,7 +8,7 @@ from gpt.gpt import GPT
 from gpt.train.training import train
 from tests.addition.datasets import get_train_test_datasets
 from tests.addition.evaluator import Evaluator
-from tests.test_constants.constants import VOCAB_SIZE, NUM_DIGITS, RANDOM_SEED
+from tests.constants import VOCAB_SIZE, NUM_DIGITS, RANDOM_SEED
 
 
 class Test(unittest.TestCase):

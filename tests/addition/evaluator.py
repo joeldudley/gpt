@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data.dataloader import DataLoader
 
-from tests.test_constants.constants import NUM_DIGITS, BATCH_SIZE
+from tests.constants import NUM_DIGITS, BATCH_SIZE
 
 
 class Evaluator:

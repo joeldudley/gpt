@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import Dataset
 
-from tests.test_constants.constants import RANDOM_SEED, NUM_DIGITS, TEST_SET_SIZE
+from tests.constants import RANDOM_SEED, NUM_DIGITS, TEST_SET_SIZE
 
 
 class SimpleDataset(Dataset):
