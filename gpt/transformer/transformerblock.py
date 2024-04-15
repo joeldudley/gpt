@@ -1,13 +1,13 @@
 import torch.nn as nn
 from torch import Tensor
-from torch.nn import init
+from torch.nn import init, Module
 
 from gpt.constants import EMBED_DIM
 from gpt.transformer.multiheadattention import MultiHeadAttention
 from gpt.transformer.transformerblockfeedforward import TransformerBlockFeedForward
 
 
-class TransformerBlock(nn.Module):
+class TransformerBlock(Module):
     def __init__(self, max_seq_len: int):
         super().__init__()
         self.norm_inputs = nn.LayerNorm(EMBED_DIM)

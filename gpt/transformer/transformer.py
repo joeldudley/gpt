@@ -1,25 +1,24 @@
 import torch
-import torch.nn as nn
 from torch import Tensor
-from torch.nn import init
+from torch.nn import init, Module, Embedding, ModuleList, Dropout, LayerNorm
 
 from gpt.constants import EMBED_DIM, DROPOUT_PROB, NUM_BLOCKS, STD
 from gpt.transformer.transformerblock import TransformerBlock
 
 
-class Transformer(nn.Module):
+class Transformer(Module):
     def __init__(self, vocab_size: int, max_seq_len: int):
         super().__init__()
-        self.token_embedding_weights = nn.Embedding(vocab_size, EMBED_DIM)
+        self.token_embedding_weights = Embedding(vocab_size, EMBED_DIM)
         init.normal_(self.token_embedding_weights.weight, std=STD)
 
-        self.position_embedding_weights = nn.Embedding(max_seq_len, EMBED_DIM)
+        self.position_embedding_weights = Embedding(max_seq_len, EMBED_DIM)
         init.normal_(self.position_embedding_weights.weight, std=STD)
 
-        self.dropout = nn.Dropout(DROPOUT_PROB)
-        self.transformer_blocks = nn.ModuleList([TransformerBlock(max_seq_len) for _ in range(NUM_BLOCKS)])
+        self.dropout = Dropout(DROPOUT_PROB)
+        self.transformer_blocks = ModuleList([TransformerBlock(max_seq_len) for _ in range(NUM_BLOCKS)])
 
-        self.layer_norm_feedforward = nn.LayerNorm(EMBED_DIM)
+        self.layer_norm_feedforward = LayerNorm(EMBED_DIM)
         init.zeros_(self.layer_norm_feedforward.bias)
         init.ones_(self.layer_norm_feedforward.weight)
 

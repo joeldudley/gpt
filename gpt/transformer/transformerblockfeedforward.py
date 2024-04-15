@@ -1,12 +1,12 @@
 import torch.nn as nn
 from torch import Tensor
-from torch.nn import init
+from torch.nn import init, Module
 
 from gpt.constants import EMBED_DIM, DROPOUT_PROB, STD
 from gpt.transformer.gelu import GaussianErrorLinearUnit
 
 
-class TransformerBlockFeedForward(nn.Module):
+class TransformerBlockFeedForward(Module):
     def __init__(self):
         super().__init__()
         self.output_linear_transform = nn.Linear(EMBED_DIM, 4 * EMBED_DIM)

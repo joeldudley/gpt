@@ -3,13 +3,13 @@ import math
 import torch
 import torch.nn as nn
 from torch import Tensor
-from torch.nn import init
+from torch.nn import init, Module
 from torch.nn.functional import softmax
 
 from gpt.constants import EMBED_DIM, NUM_ATTN_HEADS, DROPOUT_PROB, STD
 
 
-class MultiHeadAttention(nn.Module):
+class MultiHeadAttention(Module):
     def __init__(self, max_seq_len: int):
         super().__init__()
         self.keys_queries_values = nn.Linear(EMBED_DIM, NUM_ATTN_HEADS * EMBED_DIM)
