@@ -19,7 +19,7 @@ def _get_params_by_type(named_modules, named_params):
 
 
 def _get_linear_weight_params(named_modules):
-    return {'%s.%s' % (module_name, param_name) if module_name else param_name
+    return {(module_name + '.' if module_name else '') + param_name
             for module_name, module in named_modules
             for param_name, _ in module.named_parameters()
             if param_name.endswith('weight') and isinstance(module, torch.nn.Linear)}
