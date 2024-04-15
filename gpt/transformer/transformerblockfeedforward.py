@@ -9,11 +9,11 @@ class TransformerBlockFeedForward(nn.Module):
         super().__init__()
         self.output_linear_transform = nn.Linear(EMBED_DIM, 4 * EMBED_DIM)
         self.residual_projections = nn.Linear(4 * EMBED_DIM, EMBED_DIM)
-        self.activation = GaussianErrorLinearUnit()
+        self.gelu = GaussianErrorLinearUnit()
         self.dropout = nn.Dropout(DROPOUT_PROB)
 
     def forward(self, inputs):
-        linear_transform = self.output_linear_transform(inputs)
-        activations = self.activation(linear_transform)
-        projections = self.residual_projections(activations)
-        return self.dropout(projections)
+        linear_transform = self.output_linear_transform.forward(inputs)
+        activations = self.gelu.forward(linear_transform)
+        projections = self.residual_projections.forward(activations)
+        return self.dropout.forward(projections)

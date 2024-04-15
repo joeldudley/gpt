@@ -14,10 +14,10 @@ class TransformerBlock(nn.Module):
         self.feedforward = TransformerBlockFeedForward()
 
     def forward(self, inputs):
-        inputs_normed = self.norm_inputs(inputs)
-        attn_outputs = self.multi_head_attention(inputs_normed)
+        inputs_normed = self.norm_inputs.forward(inputs)
+        attn_outputs = self.multi_head_attention.forward(inputs_normed)
         attn_outputs_with_skip = attn_outputs + inputs
-        attn_outputs_normed = self.norm_multi_head_attention(attn_outputs_with_skip)
-        feedforward_outputs = self.feedforward(attn_outputs_normed)
+        attn_outputs_normed = self.norm_multi_head_attention.forward(attn_outputs_with_skip)
+        feedforward_outputs = self.feedforward.forward(attn_outputs_normed)
         feedforward_outputs_with_skip = feedforward_outputs + attn_outputs_with_skip
         return feedforward_outputs_with_skip

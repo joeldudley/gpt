@@ -17,8 +17,8 @@ class GPT(nn.Module):
         self.apply(self._init_weights)
 
     def forward(self, inputs, targets=None):
-        transformer_outputs = self.transformer(inputs)
-        logits = self.language_modeling_head(transformer_outputs)
+        transformer_outputs = self.transformer.forward(inputs)
+        logits = self.language_modeling_head.forward(transformer_outputs)
         loss = None if targets is None else self._get_loss(logits, targets)
         return logits, loss
 
@@ -31,7 +31,7 @@ class GPT(nn.Module):
 
     def generate_token(self, prev_tokens):
         cropped_tokens = prev_tokens if prev_tokens.size(1) <= self.max_seq_len else prev_tokens[:, -self.max_seq_len:]
-        logits, _ = self(cropped_tokens)  # We skip the scaling of logits by temperature in the original GPT-2 paper.
+        logits, _ = self.forward(cropped_tokens)  # Skip the scaling of logits by temp., as in the original GPT-2 paper.
         probabilities = softmax(logits[:, -1, :], dim=-1)
         return torch.topk(probabilities, k=1)[1]
 
