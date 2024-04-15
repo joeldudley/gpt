@@ -1,4 +1,5 @@
 import torch
+from torch.optim import AdamW
 
 from gpt.constants import WEIGHT_DECAY
 
@@ -7,7 +8,7 @@ def get_adamw_optimizer(named_modules, named_params):
     decay_params, no_decay_params = _get_params_by_type(named_modules, named_params)
     optimiser_groups = [{"params": decay_params, "weight_decay": WEIGHT_DECAY},
                         {"params": no_decay_params, "weight_decay": 0.0}]
-    return torch.optim.AdamW(optimiser_groups)
+    return AdamW(optimiser_groups)
 
 
 def _get_params_by_type(named_modules, named_params):
