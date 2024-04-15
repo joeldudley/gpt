@@ -23,7 +23,7 @@ def train(model, train_dataset, iterations, batch_end_callback):
         inputs, targets = [tensor for tensor in batch]
         _, loss = model(inputs, targets)
 
-        model.zero_grad(set_to_none=True)
+        model.zero_grad()
         loss.backward()
         clip_grad_norm_(model.parameters(), MAX_GRAD_NORM)
         optimizer.step()
