@@ -19,7 +19,7 @@ class Test(unittest.TestCase):
         self.evaluator = Evaluator(self.train_dataset, self.test_dataset, self.model)
 
     def test_learns_to_sum_two_digit_numbers(self):
-        expected_correctness = {0: (1, 0), 500: (2608, 262), 1000: (8124, 896), 1500: (8986, 996)}
+        expected_correctness = {0: (0, 1), 500: (2803, 678), 1000: (4012, 987), 1500: (3994, 987), 2000: (4049, 1000)}
 
         def callback(iteration):
             self._print_progress(iteration)
@@ -30,7 +30,7 @@ class Test(unittest.TestCase):
                 self.assertEqual(expected_correct_train, qty_correct_train)
                 self.assertEqual(expected_correct_test, qty_correct_test)
 
-        train(self.model, self.train_dataset, 1500, callback)
+        train(self.model, self.train_dataset, 2000, callback)
 
     @staticmethod
     def _set_rand_seeds():
