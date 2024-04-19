@@ -5,7 +5,7 @@ import numpy as np
 import torch
 
 from gpt.gpt import GPT
-from gpt.train.training import train
+from gpt.train.training import Trainer
 from tests.addition.datasets import get_train_test_datasets
 from tests.addition.evaluator import Evaluator
 from tests.constants import VOCAB_SIZE, NUM_DIGITS, RANDOM_SEED
@@ -30,7 +30,7 @@ class Test(unittest.TestCase):
                 self.assertEqual(expected_correct_train, qty_correct_train)
                 self.assertEqual(expected_correct_test, qty_correct_test)
 
-        train(self.model, self.train_dataset, 2000, callback)
+        Trainer(self.model, self.train_dataset).train(2000, callback)
 
     @staticmethod
     def _set_rand_seeds():
