@@ -14,12 +14,11 @@ class Trainer:
         self.optimizer = get_adamw_optimizer(model.named_modules(), model.named_parameters())
         self.dataloader = DataLoader(train_dataset, shuffle=False, pin_memory=True, batch_size=BATCH_SIZE,
                                      sampler=RandomSampler(train_dataset, replacement=True, num_samples=NUM_SAMPLES))
-
         self.data_iter = iter(self.dataloader)
 
     def train(self, iterations: int, batch_end_callback) -> None:
         for iteration in range(iterations + 1):
-            inputs, targets = [tensor for tensor in self._get_batch()]
+            inputs, targets = self._get_batch()
             _, loss = self.model(inputs, targets)
 
             self.model.zero_grad()
