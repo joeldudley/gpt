@@ -1,6 +1,6 @@
 # Simple GPT
 
-An implementation of the GPT-2 architecture with PyTorch. It implements its own attention blocks, while using
+An implementation of the GPT-2 architecture using PyTorch. It implements its own attention blocks, while using
 off-the-shelf PyTorch components for neural networks/embeddings/optimizers/etc.
 
 The focus is on simplicity over performance. With this in mind, it's made various sacrifices (no GPU support, no
