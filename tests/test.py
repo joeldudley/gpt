@@ -4,8 +4,8 @@ import unittest
 import numpy as np
 import torch
 
-from gpt.gpt import GPT
-from gpt.train.training import Trainer
+from simplegpt.gpt import GPT
+from simplegpt.training.training import Trainer
 from tests.addition.datasets import get_train_test_datasets
 from tests.addition.evaluator import Evaluator
 from tests.constants import VOCAB_SIZE, NUM_DIGITS, RANDOM_SEED

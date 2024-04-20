@@ -4,8 +4,8 @@ from torch import Tensor
 from torch.nn import init, Module
 from torch.nn.functional import cross_entropy, softmax
 
-from gpt.constants import EMBED_DIM, STD
-from gpt.transformer.transformer import Transformer
+from simplegpt.config.config import EMBED_DIM, STD
+from simplegpt.transformer import Transformer
 
 
 class GPT(Module):

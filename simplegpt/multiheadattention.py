@@ -6,7 +6,7 @@ from torch import Tensor
 from torch.nn import init, Module
 from torch.nn.functional import softmax
 
-from gpt.constants import EMBED_DIM, NUM_ATTN_HEADS, DROPOUT_PROB, STD
+from simplegpt.config.config import EMBED_DIM, NUM_ATTN_HEADS, DROPOUT_PROB, STD
 
 
 class MultiHeadAttention(Module):

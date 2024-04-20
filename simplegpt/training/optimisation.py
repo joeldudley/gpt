@@ -1,7 +1,7 @@
 import torch
 from torch.optim import AdamW
 
-from gpt.constants import WEIGHT_DECAY
+from simplegpt.config.config import WEIGHT_DECAY
 
 
 def get_adamw_optimizer(named_modules, named_params):

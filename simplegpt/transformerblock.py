@@ -2,9 +2,9 @@ import torch.nn as nn
 from torch import Tensor
 from torch.nn import init, Module
 
-from gpt.constants import EMBED_DIM
-from gpt.transformer.multiheadattention import MultiHeadAttention
-from gpt.transformer.transformerblockfeedforward import TransformerBlockFeedForward
+from simplegpt.config.config import EMBED_DIM
+from simplegpt.multiheadattention import MultiHeadAttention
+from simplegpt.transformerblockfeedforward import TransformerBlockFeedForward
 
 
 class TransformerBlock(Module):

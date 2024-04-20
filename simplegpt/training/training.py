@@ -4,8 +4,8 @@ from torch.utils.data import Dataset
 from torch.utils.data import RandomSampler
 from torch.utils.data.dataloader import DataLoader
 
-from gpt.constants import NUM_SAMPLES, BATCH_SIZE, MAX_GRAD_NORM
-from gpt.train.optimisation import get_adamw_optimizer
+from simplegpt.config.config import MAX_GRAD_NORM, BATCH_SIZE, NUM_SAMPLES
+from simplegpt.training.optimisation import get_adamw_optimizer
 
 
 class Trainer:

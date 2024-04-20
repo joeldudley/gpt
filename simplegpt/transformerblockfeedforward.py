@@ -2,8 +2,8 @@ import torch.nn as nn
 from torch import Tensor
 from torch.nn import init, Module
 
-from gpt.constants import EMBED_DIM, DROPOUT_PROB, STD
-from gpt.transformer.gelu import GaussianErrorLinearUnit
+from simplegpt.config.config import EMBED_DIM, DROPOUT_PROB, STD
+from simplegpt.gelu import GaussianErrorLinearUnit
 
 
 class TransformerBlockFeedForward(Module):

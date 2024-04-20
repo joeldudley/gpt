@@ -2,8 +2,8 @@ import torch
 from torch import Tensor
 from torch.nn import init, Module, Embedding, ModuleList, Dropout, LayerNorm
 
-from gpt.constants import EMBED_DIM, DROPOUT_PROB, NUM_BLOCKS, STD
-from gpt.transformer.transformerblock import TransformerBlock
+from simplegpt.config.config import EMBED_DIM, DROPOUT_PROB, NUM_TRANSFORMER_BLOCKS, STD
+from simplegpt.transformerblock import TransformerBlock
 
 
 class Transformer(Module):
@@ -16,7 +16,7 @@ class Transformer(Module):
         init.normal_(self.position_embedding_weights.weight, std=STD)
 
         self.dropout = Dropout(DROPOUT_PROB)
-        self.transformer_blocks = ModuleList([TransformerBlock(max_seq_len) for _ in range(NUM_BLOCKS)])
+        self.transformer_blocks = ModuleList([TransformerBlock(max_seq_len) for _ in range(NUM_TRANSFORMER_BLOCKS)])
 
         self.layer_norm_feedforward = LayerNorm(EMBED_DIM)
         init.zeros_(self.layer_norm_feedforward.bias)
